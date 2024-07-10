@@ -27,12 +27,12 @@
         state: started
         enabled: yes
 
-     - name: Ensure Docker daemon is started
-       command: docker info
-       register: docker_status
-       retries: 5
-       delay: 7
-       until: docker_status.rc == 0
+    - name: Ensure Docker daemon is started
+      command: docker info
+      register: docker_status
+      retries: 5
+      delay: 7
+      until: docker_status.rc == 0
 
     # - name: Copy Docker Compose file to the server
     #   copy:
