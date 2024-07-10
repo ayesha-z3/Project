@@ -14,7 +14,17 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.SECRET_KEY }}
-        aws-region: us-east-1  
+        aws-region: us-east-1 
+        
+    - name: Set up SSH
+      run: |
+        echo "${{ secrets.EC2_KEY_PAIR }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+    - name: Add SSH key to the agent
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_KEY_PAIR }}
     
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
