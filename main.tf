@@ -69,7 +69,7 @@ resource "aws_security_group" "devops_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = -1
-    cidr_blocks = ["0.0.0.0/0"]s
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
