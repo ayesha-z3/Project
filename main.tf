@@ -86,6 +86,7 @@ resource "aws_instance" "devops-server" {
   }
   provisioner "local-exec" {
     command = <<EOT
+      sleep 60
       echo "[devops-server]" > inventory
       echo "${aws_instance.devops-server.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/MyKeyPair3.pem" >> inventory
       ansible-playbook -i inventory playbook.yml -vvv
