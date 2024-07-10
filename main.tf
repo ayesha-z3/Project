@@ -87,8 +87,8 @@ resource "aws_instance" "devops-server" {
   provisioner "local-exec" {
     command = <<EOT
       echo "[devops-server]" > inventory
-      echo "${aws_instance.devops-server.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_ed25519" >> inventory
-      ansible-playbook -i inventory playbook.yml
+      echo "${aws_instance.devops-server.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/MyKeyPair3.pem" >> inventory
+      ansible-playbook -i inventory playbook.yml -vvv
     EOT
   }
 
