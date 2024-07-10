@@ -21,8 +21,8 @@
         executable : pip3
         state : present
     
-     - name: Start and enable Docker service
-       service:
+    - name: Start and enable Docker service
+      service:
         name: docker
         state: started
         enabled: yes
