@@ -69,7 +69,7 @@ resource "aws_security_group" "devops_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = -1
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]s
   }
 }
 
@@ -84,6 +84,13 @@ resource "aws_instance" "devops-server" {
 
   tags = {
     Name = "EC2-instance"
+  }
+  provisioner "local-exec" {
+    command = <<EOT
+      echo "[devops-server]" > inventory
+      echo "$(aws_instance.devops-server.public_ip) ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/MyKeyPair.pem" >> inventory
+      ansible-playbook -i inventory playbook.yml
+    EOT
   }
 
 }
