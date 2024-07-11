@@ -18,7 +18,7 @@ jobs:
         
     - name: Set up SSH
       run: |
-        mkdir -p ~/.ssh
+        mkdir -p ~/Downloads
         echo "${{ secrets.EC2_KEY_PAIR }}" > ~/Downloads/ec2.pem
         chmod 600 ~/Downloads/ec2.pem
 
