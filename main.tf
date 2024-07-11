@@ -85,13 +85,13 @@ resource "aws_instance" "devops-server" {
     Name = "EC2-instance"
   }
 }
- resource "local-exec" "inventory" {
-  command = <<-EOT
-    filename = “./inventory.ini”
+ resource "local_file" "inventory" {
+    filename = "./inventory.ini"
+      content = <<EOF
     echo "[devops-server]" > inventory.ini
     echo "${aws_instance.devops-server.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=~/Downloads/ec2.pem" > inventory.ini
     ansible-playbook -i inventory.ini playbook.yml -vvv
-  EOT
+  EOF
 
 }
 
