@@ -88,7 +88,7 @@ resource "aws_instance" "devops-server" {
     command = <<EOT
       sleep 120
       echo "[devops-server]" > inventory
-      echo "${aws_instance.devops-server.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/MyKeyPair3" >> inventory
+      echo "${aws_instance.devops-server.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/MyKeyPair4" >> inventory
       ansible-playbook -i inventory playbook.yml -vvv
     EOT
   }
