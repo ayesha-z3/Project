@@ -19,8 +19,8 @@ jobs:
     - name: Set up SSH
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.EC2_KEY_PAIR }}" > ~/.ssh/MyKeyPair4
-        chmod 600 ~/.ssh/MyKeyPair4
+        echo "${{ secrets.EC2_KEY_PAIR }}" > ~/Downloads/ec2.pem
+        chmod 600 ~/Downloads/ec2.pem
 
     - name: Add SSH key to the agent
       uses: webfactory/ssh-agent@v0.5.3
