@@ -76,24 +76,36 @@ resource "aws_security_group" "devops_sg" {
 resource "aws_instance" "devops-server" {
 
   instance_type = "t3.micro"
-  ami           = "ami-0c02fb55956c7d316"
+  ami           = "ami-04a81a99f5ec58529"
   subnet_id = aws_subnet.devops_public_subnet.id
   vpc_security_group_ids = [aws_security_group.devops_sg.id]
   associate_public_ip_address = true
+  key_name =  "my-second-new-key"
 
   tags = {
     Name = "EC2-instance"
   }
 }
- resource "local_file" "inventory" {
-    filename = "./inventory.ini"
-      content = <<EOF
-    echo "[devops-server]" > inventory.ini
-    echo "${aws_instance.devops-server.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=~/Downloads/ec2.pem" > inventory.ini
-    ansible-playbook -i inventory.ini playbook.yml -vvv
-  EOF
-
+data "template_file" "inventory" {
+  template = <<-EOT
+    [devops-server]
+    ${aws_instance.devops-server.public_ip} ansible_user=ubuntu ansible_private_key_file=./.github/workflows/my-second-new-key.pem
+    EOT
 }
+resource "local_file" "inventory" {
+  depends_on = [aws_instance.devops-server]
+  filename = "inventory.ini"
+  content = data.template_file.inventory.rendered
+  provisioner "local-exec"{
+    command = "chmod 600 ${local_file.inventory.filename}"
+  }
+}
+# resource "null_resource" "run_ansible" {
+#   depends_on = [local_file.inventory]
+#   provisioner "local-exec" {
+#     command = "ansible-playbook -i inventory.ini playbook.yml"
+#   }
+# }
 
 output "internet_gateway_id" {
   value = aws_internet_gateway.devops-igw.id
