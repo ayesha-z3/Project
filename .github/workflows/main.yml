@@ -19,8 +19,8 @@ jobs:
     - name: Set up SSH
       run: |
         mkdir -p ~/Downloads
-        echo "${{ secrets.EC2_KEY_PAIR }}" > ~/Downloads/ec2.pem
-        chmod 600 ~/Downloads/ec2.pem
+        echo "${{ secrets.EC2_KEY_PAIR }}" > ~/Downloads/my-second-new-key.pem
+        chmod 600 ~/Downloads/my-second-new-key.pem
 
     - name: Add SSH key to the agent
       uses: webfactory/ssh-agent@v0.5.3
@@ -41,5 +41,18 @@ jobs:
     - name: Terraform Apply
       if: github.ref == 'refs/heads/dev'
       run: terraform apply -auto-approve
+
+    - name: Create PEM file from secret
+      run: |
+        echo "${{ secrets.EC2_KEY_PAIR }}" > ./.github/workflows/my-second-new-key.pem
+        chmod 600 ./.github/workflows/my-second-new-key.pem
+      
+    - name: Run Ansible playbook with Inventory
+      run: |
+        ls
+        ansible-playbook --private-key ./.github/workflows/my-second-new-key.pem -i .inventory.ini playbook.yml
+      env:
+        EC2_KEY_PAIR: ./.github/workflows/my-second-new-key.pem
+        ANSIBLE_HOST_KEY_CHECKING: False
       
     
