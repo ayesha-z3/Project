@@ -42,15 +42,15 @@ jobs:
       if: github.ref == 'refs/heads/dev'
       run: terraform apply -auto-approve
 
-    # - name: Create PEM file from secret
-    #   run: |
-    #     echo "${{ secrets.EC2_KEY_PAIR }}" > ./.github/workflows/my-second-new-key.pem
-    #     chmod 600 ./.github/workflows/my-second-new-key.pem
+    - name: Create PEM file from secret
+      run: |
+        echo "${{ secrets.EC2_KEY_PAIR }}" > ./.github/workflows/my-second-new-key.pem
+        chmod 600 ./.github/workflows/my-second-new-key.pem
       
     - name: Run Ansible playbook with Inventory
       run: |
         ls
-        ansible-playbook --private-key ${{ secrets.EC2_KEY_PAIR }} -i ./.github/workflows/inventory.ini playbook.yml
+        ansible-playbook --private-key ./.github/workflows/my-second-new-key.pem -i ./.github/workflows/inventory.ini playbook.yml
       # env:
       #   EC2_KEY_PAIR: ./.github/workflows/my-second-new-key.pem
       #   ANSIBLE_HOST_KEY_CHECKING: False
